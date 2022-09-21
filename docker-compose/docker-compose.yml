@@ -1,0 +1,44 @@
+version: '3'
+
+volumes:
+  mysql_data:
+      driver: local
+
+services:
+  mariadb:
+      image: docker.io/mariadb:10.0
+      volumes:
+        - mysql_data:/var/lib/mysql
+      environment:
+        MYSQL_ROOT_PASSWORD: root
+        MYSQL_DATABASE: keycloak
+        MYSQL_USER: keycloak
+        MYSQL_PASSWORD: password
+      healthcheck:
+        test: ["CMD", "mysqladmin", "ping", "--silent"]
+        interval: 30s
+        timeout: 5s
+        retries: 3
+      ports:
+        - 3306:3306
+  keycloak:
+      image: quay.io/keycloak/keycloak:15.1.1
+      environment:
+        DB_VENDOR: mariadb
+        DB_ADDR: mariadb
+        DB_DATABASE: keycloak
+        DB_USER: keycloak
+        DB_PASSWORD: password
+        KEYCLOAK_USER: admin
+        KEYCLOAK_PASSWORD: Pa55w0rd
+        JGROUPS_DISCOVERY_PROTOCOL: JDBC_PING
+      healthcheck:
+        test: ["CMD", "curl", "-f", "http://localhost:8080/auth/"]
+        interval: 15s
+        timeout: 5s
+        retries: 5 
+      ports:
+        - 8080:8080
+        - 8443:8443
+      depends_on:
+        - mariadb

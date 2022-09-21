@@ -1,0 +1,8 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  name: quotes
+  annotations:
+    openshift.io/display-name: Keycloak Application
+    description: The Keycloak application provides an SSO services
+objects:

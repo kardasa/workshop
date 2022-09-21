@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f ../docker-compose.yml
+    kompose.version: 1.26.1 (HEAD)
+  labels:
+    io.kompose.service: keycloak
+  name: keycloak
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: keycloak
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f ../docker-compose.yml
+        kompose.version: 1.26.1 (HEAD)
+      labels:
+        io.kompose.service: keycloak
+    spec:
+      containers:
+        - env:
+            - name: DB_ADDR
+              value: mariadb
+            - name: DB_DATABASE
+              value: keycloak
+            - name: DB_PASSWORD
+              value: password
+            - name: DB_USER
+              value: keycloak
+            - name: DB_VENDOR
+              value: mariadb
+            - name: JGROUPS_DISCOVERY_PROTOCOL
+              value: JDBC_PING
+            - name: KEYCLOAK_PASSWORD
+              value: Pa55w0rd
+            - name: KEYCLOAK_USER
+              value: admin
+          image: quay.io/keycloak/keycloak:15.1.1
+          livenessProbe:
+            httpGet:
+              path: /auth
+              port: 8080
+            initialDelaySeconds: 60
+            timeoutSeconds: 5
+            failureThreshold: 5
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /auth
+              port: 8080
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 5
+            periodSeconds: 15
+          name: keycloak
+          ports:
+            - containerPort: 8080
+            - containerPort: 8443
+      restartPolicy: Always
+status: {}

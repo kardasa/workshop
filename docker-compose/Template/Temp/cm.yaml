@@ -1,0 +1,9 @@
+apiVersion: v1
+data:
+  DB_ADDR: mariadb
+  DB_VENDOR: mariadb
+  JGROUPS_DISCOVERY_PROPERTIES: dns_query=keycloak-jgroups.test-project.svc.cluster.local
+  JGROUPS_DISCOVERY_PROTOCOL: dns.DNS_PING
+kind: ConfigMap
+metadata:
+  name: keycloak-config

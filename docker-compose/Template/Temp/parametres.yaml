@@ -1,0 +1,25 @@
+parameters:
+- name: NAMESPACE
+  displayName: A namespace needed to proper cluster discovery
+  description: A namespace needed to proper cluster discovery
+  required: true
+- name: DB_PASSWORD
+  displayName: Database Password
+  description: Password to access the database
+  generate: expression
+  from: '[a-zA-Z0-9]{16}'
+- name: MYSQL_ROOT_PASSWORD
+  displayName: MariaDB administrator Password
+  description: MariaDB administrator Password
+  generate: expression
+  from: '[a-zA-Z0-9]{16}'
+- name: KEYCLOAK_PASSWORD
+  displayName: Keycloak administrator Password
+  description: Keycloak administrator Password
+  generate: expression
+  from: '[a-zA-Z0-9]{16}'
+- name: KEYCLOAK_USER
+  displayName: Keycloak admin user
+  description: Keycloak administrator
+  generate: expression
+  from: '[a-zA-Z0-9]{8}'
